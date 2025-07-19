@@ -9,7 +9,9 @@ import com.abhay.Student_login_project.repositories.StudentRepository;
 import com.abhay.Student_login_project.services.AuthTokenService;
 import com.abhay.Student_login_project.services.CustomStudentDetailsService;
 import com.abhay.Student_login_project.utils.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,6 +52,25 @@ public class AuthController {
         String token = authTokenService.generateOrReuseToken(student);
 
         // 4. Return response
-        return ResponseEntity.ok(new LoginResponse(token));
+        return ResponseEntity.ok(new LoginResponse(student.getUsername(),token, student.getEmail(), student.getFullName()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+
+        if (header == null || !header.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Authorization header");
+        }
+
+        String token = header.substring(7); // remove "Bearer "
+
+        boolean removed = authTokenService.logout(token);
+
+        if (removed) {
+            return ResponseEntity.ok("User logged out successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found or already invalid");
+        }
     }
 }

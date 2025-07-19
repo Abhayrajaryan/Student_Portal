@@ -43,5 +43,14 @@ public class AuthTokenService {
 
         return newToken;
     }
+
+    public boolean logout(String token) {
+        Optional<AuthToken> authToken = authTokenRepository.findByToken(token);
+        if (authToken.isPresent()) {
+            authTokenRepository.delete(authToken.get());
+            return true;
+        }
+        return false;
+    }
 }
 
