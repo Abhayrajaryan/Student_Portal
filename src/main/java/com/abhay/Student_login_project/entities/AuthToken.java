@@ -17,9 +17,8 @@ public class AuthToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String token;
-
-    private LocalDateTime expiry;
 
     @OneToOne
     @JoinColumn(name = "student_id", unique = true)
