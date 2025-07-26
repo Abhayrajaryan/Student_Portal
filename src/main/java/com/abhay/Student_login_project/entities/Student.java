@@ -24,4 +24,18 @@ public class Student {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "security_question_id", unique = true)
     private SecurityQuestion securityQuestion;
+
+    public String getFullName(){
+        StringBuilder fullName = new StringBuilder();
+        if(this.firstName != null && !this.firstName.equals("")){
+            fullName.append(this.firstName);
+        }
+        if(this.middleName != null && !this.middleName.trim().equals("")){
+            fullName.append(" ").append(this.middleName);
+        }
+        if(this.lastName != null && !this.lastName.trim().equals("")){
+            fullName.append(" ").append(this.lastName);
+        }
+        return fullName.toString();
+    }
 }

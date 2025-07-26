@@ -7,6 +7,7 @@ import com.abhay.Student_login_project.entities.Student;
 import com.abhay.Student_login_project.repositories.QuestionsRepository;
 import com.abhay.Student_login_project.repositories.SecurityQuestionRepository;
 import com.abhay.Student_login_project.repositories.StudentRepository;
+import com.abhay.Student_login_project.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class StudentService {
 
     @Autowired
     private QuestionsRepository questionsRepository;
+
+    @Autowired
+    private Util util;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -46,5 +50,9 @@ public class StudentService {
         }
 
         return studentRepository.save(student);
+    }
+
+    public Student getStudentDetails(String authHeader) {
+        return util.getStudentFromToken(authHeader);
     }
 }
